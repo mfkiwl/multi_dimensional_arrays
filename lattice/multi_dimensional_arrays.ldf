@@ -6,9 +6,6 @@
         <Source name="../source/multi_dimensional_array.vhd" type="VHDL" type_short="VHDL">
             <Options top_module="multi_dimensional_array"/>
         </Source>
-        <Source name="../source/tb_multi_dimensional_array.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="../source/types.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>

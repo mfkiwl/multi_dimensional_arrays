@@ -26,7 +26,7 @@ use work.types.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -39,23 +39,35 @@ use work.types.all;
 --end package types;
 
 entity tb_multi_dimensional_array is
+    generic (
+            address_width : natural := 4;
+            data_width : natural := 4
+            );
 end tb_multi_dimensional_array;
 
 architecture Behavioral of tb_multi_dimensional_array is
 
-component tb_multi_dimensional_array is
+component multi_dimensional_array is
     generic (
-            address_width : natural := 2;
+            address_width : natural := 4;
             data_width : natural := 4
             );
     Port ( 
-            clk : in STD_LOGIC;
-            mem_array_in : in mem_array_t(0 to address_width-1, data_width-1 downto 0) := (others => (others => '0'));
-            mem_array_out : out mem_array_t(0 to address_width-1, data_width-1 downto 0) := (others => (others => '0'))
+            clk : in std_logic;
+            mem_array_data_in : in std_logic_vector(data_width-1 downto 0) := (others => '0');
+            mem_array_address_in : in integer range 0 to (address_width**2)-1 := 0;
+            mem_array_data_out : out std_logic_vector(data_width-1 downto 0) := (others => '0')
             );
 end component;
 
 signal clk : std_logic := '0';
+constant TIME_PERIOD_CLK : time := 1 ns;
+signal stop_clks : boolean := FALSE;
+signal test_pass : boolean := FALSE;
+
+signal mem_array_data_in : std_logic_vector(data_width-1 downto 0) := (others => '0');
+signal mem_array_address_in : integer range 0 to (address_width**2)-1 := 0;
+signal mem_array_data_out : std_logic_vector(data_width-1 downto 0) := (others => '0');
 
 begin
 
@@ -68,10 +80,30 @@ begin
     wait;
 end process;
 
+dut : multi_dimensional_array
+    generic map(
+            address_width => address_width, -- : natural := 4;
+            data_width => data_width -- : natural := 4
+            )
+    Port map( 
+            clk => clk,                                   -- : in std_logic;
+            mem_array_data_in => mem_array_data_in,       -- : in std_logic_vector(data_width-1 downto 0) := (others => '0');
+            mem_array_address_in => mem_array_address_in, -- : in integer range 0 to (address_width**2)-1 := 0;
+            mem_array_data_out => mem_array_data_out      -- : out std_logic_vector(data_width-1 downto 0) := (others => '0')
+            );
+
 process
 begin
-    wait until rising_edge(clk);
-    mem_array_out <= mem_array_in;
+--    for i in mem_array_address_in'RANGE loop
+    for i in 0 to (address_width**2)-1 loop
+        wait until rising_edge(clk);
+        mem_array_data_in <= std_logic_vector(to_unsigned(i,mem_array_data_in'LENGTH));
+        mem_array_address_in <= i;
+        wait until rising_edge(clk);
+        if (mem_array_data_out = mem_array_data_in) then test_pass <= TRUE; else test_pass <= FALSE; end if;
+    end loop;
+    stop_clks <= TRUE;
+    wait;
 end process;
 
 end Behavioral;
