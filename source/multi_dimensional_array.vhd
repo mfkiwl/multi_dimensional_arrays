@@ -40,12 +40,13 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity multi_dimensional_array is
 	generic (
-			address_width : natural := 4;
-			data_width : natural := 4
+			address_width : natural := 6;
+			data_width : natural := 16
 			);
     Port ( 
             clk : in std_logic;
             mem_array_data_in : in std_logic_vector(data_width-1 downto 0) := (others => '0');
+--            mem_array_address_in : in std_logic_vector(address_width-1 downto 0) := (others => '0');
             mem_array_address_in : in integer range 0 to (address_width**2)-1 := 0;
             mem_array_data_out : out std_logic_vector(data_width-1 downto 0) := (others => '0')
     		);
@@ -79,7 +80,7 @@ architecture Behavioral of multi_dimensional_array is
         end loop;
     end set_data;
     
-    signal mem_array_s : mem_array_t(0 to address_width-1, data_width-1 downto 0) := (others => (others => '0'));
+    signal mem_array_s : mem_array_t(0 to (address_width**2)-1, data_width-1 downto 0) := (others => (others => '0'));
 
 begin
 

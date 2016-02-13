@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright (c) 2001-2013 Xilinx Inc, All rights reserved -->
 
-<Project Version="7" Minor="0" Path="C:/Users/SFarmer/projects/xilinx/multi_dimensional_arrays/xilinx/multi_dimensional_arrays.xpr">
+<Project Version="7" Minor="0" Path="D:/Projects/Vivado/2014_1/multi_dimensional_arrays/xilinx/multi_dimensional_arrays.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="a386784bb317460b859cb4b406ca1721"/>
@@ -48,12 +48,19 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/tb_multi_dimensional_array_behav.wcfg">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="tb_multi_dimensional_array"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="SimulationRunTime" Val="all"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/tb_multi_dimensional_array_behav.wcfg"/>
       </Config>
     </FileSet>
   </FileSets>

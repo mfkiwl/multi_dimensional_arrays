@@ -63,7 +63,7 @@ end component;
 signal clk : std_logic := '0';
 constant TIME_PERIOD_CLK : time := 1 ns;
 signal stop_clks : boolean := FALSE;
-signal test_pass : boolean := FALSE;
+signal test_pass : boolean := TRUE;
 
 signal mem_array_data_in : std_logic_vector(data_width-1 downto 0) := (others => '0');
 signal mem_array_address_in : integer range 0 to (address_width**2)-1 := 0;
@@ -94,13 +94,14 @@ dut : multi_dimensional_array
 
 process
 begin
---    for i in mem_array_address_in'RANGE loop
-    for i in 0 to (address_width**2)-1 loop
-        wait until rising_edge(clk);
-        mem_array_data_in <= std_logic_vector(to_unsigned(i,mem_array_data_in'LENGTH));
-        mem_array_address_in <= i;
-        wait until rising_edge(clk);
-        if (mem_array_data_out = mem_array_data_in) then test_pass <= TRUE; else test_pass <= FALSE; end if;
+    for x in 0 to 1 loop
+        for i in 0 to (address_width**2)-1 loop
+            mem_array_data_in <= std_logic_vector(to_unsigned(i,mem_array_data_in'LENGTH));
+            mem_array_address_in <= i;
+            wait until rising_edge(clk);
+            wait until rising_edge(clk);
+            if (mem_array_data_out = mem_array_data_in) then test_pass <= TRUE; else test_pass <= FALSE; end if;
+        end loop;
     end loop;
     stop_clks <= TRUE;
     wait;
