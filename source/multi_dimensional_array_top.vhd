@@ -33,19 +33,25 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity tb_multi_dimensional_array is
-    generic (
-            address_width : natural := 4;
-            data_width : natural := 4
-            );
-end tb_multi_dimensional_array;
+entity multi_dimensional_array_top is
+	generic (
+			address_width : natural := 2;
+			data_width : natural := 2
+			);
+    Port ( 
+            clk : in std_logic;
+            mem_array_data_in : in std_logic_vector(data_width-1 downto 0) := (others => '0');
+            mem_array_address_in : in integer range 0 to (address_width**2)-1 := 0;
+            mem_array_data_out : out std_logic_vector(data_width-1 downto 0) := (others => '0')
+    		);
+end multi_dimensional_array_top;
 
-architecture Behavioral of tb_multi_dimensional_array is
+architecture Behavioral of multi_dimensional_array_top is
 
-component multi_dimensional_array_top is
+component multi_dimensional_array is
     generic (
-            address_width : natural := 4;
-            data_width : natural := 4
+            address_width : natural := 2;
+            data_width : natural := 2
             );
     Port ( 
             clk : in std_logic;
@@ -55,52 +61,36 @@ component multi_dimensional_array_top is
             );
 end component;
 
-signal clk : std_logic := '0';
-constant TIME_PERIOD_CLK : time := 1 ns;
-signal stop_clks : boolean := FALSE;
-signal test_pass : boolean := TRUE;
+    signal mem_array_data_in_s : std_logic_vector(data_width-1 downto 0) := (others => '0');
 
-signal mem_array_data_in : std_logic_vector(data_width-1 downto 0) := (others => '0');
-signal mem_array_address_in : integer range 0 to (address_width**2)-1 := 0;
-signal mem_array_data_out : std_logic_vector(data_width-1 downto 0) := (others => '0');
 
 begin
 
-clk_gen_proc : process
-begin
-    while not stop_clks loop
-        wait for TIME_PERIOD_CLK/2;
-        clk <= not clk;
-    end loop;
-    wait;
-end process;
+--reg_proc : process
+--begin
+--    wait until rising_edge(clk);
+--    mem_array_data_in_s <= mem_array_data_in;
+--end process;
 
-dut : multi_dimensional_array_top
+multi_dimensional_array_inst : multi_dimensional_array
     generic map(
             address_width => address_width, -- : natural := 4;
             data_width => data_width -- : natural := 4
             )
     Port map( 
-            clk => clk,       -- : in std_logic;
+            clk => clk, -- : in std_logic;
+--            mem_array_data_in => mem_array_data_in_s,       -- : in std_logic_vector(data_width-1 downto 0) := (others => '0');
             mem_array_data_in => mem_array_data_in,       -- : in std_logic_vector(data_width-1 downto 0) := (others => '0');
             mem_array_address_in => mem_array_address_in, -- : in integer range 0 to (address_width**2)-1 := 0;
             mem_array_data_out => mem_array_data_out      -- : out std_logic_vector(data_width-1 downto 0) := (others => '0')
+--            mem_array_data_out => mem_array_data_in_s      -- : out std_logic_vector(data_width-1 downto 0) := (others => '0')
             );
 
-process
-begin
-    for x in 0 to 1 loop
-        for i in 0 to (address_width**2)-1 loop
-            mem_array_data_in <= std_logic_vector(to_unsigned(i,mem_array_data_in'LENGTH));
-            mem_array_address_in <= i;
-            wait until rising_edge(clk);
-            wait until rising_edge(clk);
---            wait until rising_edge(clk);
-            if (mem_array_data_out = mem_array_data_in) then test_pass <= TRUE; else test_pass <= FALSE; end if;
-        end loop;
-    end loop;
-    stop_clks <= TRUE;
-    wait;
-end process;
+--reg_proc : process
+--begin
+--    wait until rising_edge(clk);
+--    mem_array_data_out <= mem_array_data_in_s;
+--end process;
+
 
 end Behavioral;
