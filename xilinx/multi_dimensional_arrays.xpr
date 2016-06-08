@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright (c) 2001-2013 Xilinx Inc, All rights reserved -->
 
-<Project Version="7" Minor="0" Path="C:/Users/SFarmer/projects/xilinx/multi_dimensional_arrays/xilinx/multi_dimensional_arrays.xpr">
+<Project Version="7" Minor="0" Path="C:/Users/SFarmer/projects/misc/old_multi_dimensional_arrays/xilinx/multi_dimensional_arrays.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="a386784bb317460b859cb4b406ca1721"/>
